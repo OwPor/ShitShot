@@ -1,0 +1,136 @@
+[gd_scene load_steps=15 format=3 uid="uid://cvjlmomdkg4im"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_4nksf"]
+[ext_resource type="PackedScene" uid="uid://dhs5tchlvvipf" path="res://mighty_gun.tscn" id="2_prwf7"]
+[ext_resource type="Texture2D" uid="uid://yjxaqljl7038" path="res://assets/crosshair.png" id="3_l1ybi"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jh46o"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_3s8xe"]
+sky_material = SubResource("ProceduralSkyMaterial_jh46o")
+
+[sub_resource type="Environment" id="Environment_ekmb2"]
+background_mode = 2
+sky = SubResource("Sky_3s8xe")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_prmwq"]
+albedo_color = Color(0.380392, 0.25098, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jou7u"]
+material = SubResource("StandardMaterial3D_prmwq")
+height = 2.5
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_h3mps"]
+points = PackedVector3Array(0.442345, 0.929704, 0.144677, -0.482881, -0.847055, -0.0775678, -0.4433, -0.878462, -0.186914, 0.368455, -1.0052, 0.219448, -0.224021, 0.843477, 0.436137, 0.0697525, 0.848449, -0.483669, 0.324375, -0.83916, -0.368908, -0.413476, 1.00479, -0.115583, -0.114496, -0.847682, 0.475299, 0.177034, 0.724351, 0.467026, -0.186915, -0.878466, -0.443301, -0.156075, -1.21769, -0.0800219, 0.471614, 0.804503, -0.150144, 0.148588, 1.22129, 0.0723101, -0.441745, -0.839014, 0.21492, -0.292173, 0.792588, -0.400411, -0.477947, 0.765479, 0.141714, 0.473793, -0.808189, 0.142877, 0.3536, -0.714927, 0.3536, 0.108988, 1.1299, -0.305248, 0.441025, -0.926955, -0.152174, 0.0697521, -0.848445, -0.483667, 0.28668, 0.799308, -0.403772, -0.476972, 0.727443, -0.149351, 0.146497, -1.16704, -0.229857, -0.0801905, -1.22039, 0.148476, -0.11728, 1.13346, 0.298261, 0.106856, -0.849957, 0.476586, 0.397718, 0.83967, 0.288049, -0.19221, 1.16774, -0.19221, -0.332568, -0.839815, 0.361256, 0.144601, 1.00353, 0.405024)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_d23jv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g6fwx"]
+albedo_color = Color(0, 0.254902, 0, 1)
+metallic = 0.7
+metallic_specular = 0.95
+metallic_texture = SubResource("NoiseTexture2D_d23jv")
+roughness_texture_channel = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sea2i"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4aort"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o734g"]
+albedo_color = Color(0.858824, 0.72549, 0, 1)
+metallic = 0.7
+metallic_specular = 0.95
+metallic_texture = SubResource("NoiseTexture2D_4aort")
+
+[node name="World" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.5, -2.18557e-08, 0, -4.37114e-08, 1, -0.5, 0.866025, 3.78552e-08, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ekmb2")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+script = ExtResource("1_4nksf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.802923, 0)
+mesh = SubResource("CapsuleMesh_jou7u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.802923, 0)
+shape = SubResource("ConvexPolygonShape3D_h3mps")
+
+[node name="Head" type="Node3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58364, 0)
+
+[node name="FPP" type="Camera3D" parent="Player/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.151275, -0.09)
+doppler_tracking = 2
+
+[node name="mighty_gun" parent="Player/Head/FPP" instance=ExtResource("2_prwf7")]
+transform = Transform3D(0.499645, 0, -0.0188277, 0, 0.5, 0, 0.0188277, 0, 0.499645, 0.514682, -0.421212, -0.476846)
+
+[node name="TPP" type="Camera3D" parent="Player/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, 0.871013, 1.444)
+
+[node name="mighty_gun" parent="Player/Head/TPP" instance=ExtResource("2_prwf7")]
+transform = Transform3D(0.499645, 0, -0.0188277, 0, 0.5, 0, 0.0188277, 0, 0.499645, -0.266819, -1.1413, -2.00949)
+
+[node name="Ground" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.824, 0)
+use_collision = true
+size = Vector3(510, 5, 510)
+material = SubResource("StandardMaterial3D_g6fwx")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 273.642)
+use_collision = true
+size = Vector3(500, 20, 50)
+material = SubResource("StandardMaterial3D_sea2i")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -275.971)
+use_collision = true
+size = Vector3(500, 20, 50)
+material = SubResource("StandardMaterial3D_sea2i")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -274.992, 8, -1.45105)
+use_collision = true
+size = Vector3(50, 20, 598.305)
+material = SubResource("StandardMaterial3D_sea2i")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 270.583, 8, -0.434082)
+use_collision = true
+size = Vector3(50, 20, 601.358)
+material = SubResource("StandardMaterial3D_sea2i")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.999903, 0.0139622, 0, -0.0139622, 0.999903, 0, -1, 200)
+use_collision = true
+size = Vector3(100, 3, 5)
+material = SubResource("StandardMaterial3D_o734g")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_l1ybi")
+expand_mode = 1
